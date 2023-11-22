@@ -4,12 +4,17 @@
 #![test_runner(tsur_os::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
-use tsur_os::println;
 use core::panic::PanicInfo;
+use tsur_os::println;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
     println!("Hello World{}", "!");
+
+    tsur_os::init(); // new
+
+    // invoke a breakpoint exception
+    x86_64::instructions::interrupts::int3(); // new
 
     #[cfg(test)]
     test_main();
